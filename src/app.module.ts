@@ -1,12 +1,13 @@
 import { Module } from "@nestjs/common"
 import { ConfigModule } from "@nestjs/config"
 
-import { AppController } from "./app.controller"
+import { ConsumerService } from "@/kafka/consumer.service"
+import { KafkaModule } from "@/kafka/kafka.module"
+import { IS_DEV_ENV } from "@/libs/common/util/is-dev.util"
+import { MailModule } from "@/libs/mail/mail.module"
+
 import { AppService } from "./app.service"
-import { ConsumerService } from "./kafka/consumer.service"
-import { KafkaModule } from "./kafka/kafka.module"
-import { ProducerService } from "./kafka/producer.service"
-import { IS_DEV_ENV } from "./libs/common/util/is-dev.util"
+import { MailService } from "./libs/mail/mail.service"
 
 @Module({
 	imports: [
@@ -14,9 +15,9 @@ import { IS_DEV_ENV } from "./libs/common/util/is-dev.util"
 			ignoreEnvFile: !IS_DEV_ENV,
 			isGlobal: true
 		}),
-		KafkaModule
+		KafkaModule,
+		MailModule
 	],
-	providers: [AppService, ProducerService, ConsumerService],
-	controllers: [AppController]
+	providers: [AppService, ConsumerService, MailService]
 })
 export class AppModule {}
