@@ -18,11 +18,14 @@ export class MailService {
 			return
 		}
 
-		const html = await render(templateData.template(data))
-		console.log(html)
+		try {
+			const html = await render(templateData.template(data))
 
-		LOGGER.log(`Template with id "${templateId}" sended to email "${email}".`)
-		return this.sendMail(email, templateData.subject, html)
+			LOGGER.log(`Template with id "${templateId}" sended to email "${email}".`)
+			return this.sendMail(email, templateData.subject, html)
+		} catch (error) {
+			LOGGER.error(`Template data is invalid!`, error, templateData)
+		}
 	}
 
 	private sendMail(email: string, subject: string, html: string) {

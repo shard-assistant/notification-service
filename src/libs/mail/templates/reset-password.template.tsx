@@ -1,14 +1,13 @@
 import { Body, Heading, Link, Tailwind, Text } from "@react-email/components"
 import { Html } from "@react-email/html"
 import * as React from "react"
+import { z } from "zod"
+import { resetPasswordTemplateSchema } from "./schemas/reset-password.schema"
 
-interface ResetPasswordTemplateProps {
-	resetLink: string
-}
+type ResetPasswordTemplateProps = z.infer<typeof resetPasswordTemplateSchema>
 
-export function ResetPasswordTemplate({
-	resetLink
-}: ResetPasswordTemplateProps) {
+export function ResetPasswordTemplate(props: ResetPasswordTemplateProps) {
+	const { resetLink } = resetPasswordTemplateSchema.parse(props)
   return (
     <Tailwind>
       <Html>

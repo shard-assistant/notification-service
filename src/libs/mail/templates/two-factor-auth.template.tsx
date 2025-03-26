@@ -1,15 +1,14 @@
 import { Body, Heading, Tailwind, Text } from "@react-email/components"
 import { Html } from "@react-email/html"
 import * as React from "react"
+import { z } from "zod"
+import { twoFactorAuthTemplateSchema } from "./schemas/two-factor-auth.schema"
 
-interface TwoFactorAuthTemplateProps {
-	code: string
-}
+type TwoFactorAuthTemplateProps = z.infer<typeof twoFactorAuthTemplateSchema>
 
-export function TwoFactorAuthTemplate({
-	code
-}: TwoFactorAuthTemplateProps) {
-  return (
+export function TwoFactorAuthTemplate(props: TwoFactorAuthTemplateProps) {
+  const { code } = twoFactorAuthTemplateSchema.parse(props)
+	return (
     <Tailwind>
       <Html>
 			<Body className="text-black">
