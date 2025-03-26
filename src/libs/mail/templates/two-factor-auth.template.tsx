@@ -3,11 +3,11 @@ import { Html } from "@react-email/html"
 import * as React from "react"
 
 interface TwoFactorAuthTemplateProps {
-	token: string
+	code: string
 }
 
 export function TwoFactorAuthTemplate({
-	token
+	code
 }: TwoFactorAuthTemplateProps) {
   return (
     <Tailwind>
@@ -15,7 +15,7 @@ export function TwoFactorAuthTemplate({
 			<Body className="text-black">
 				<Heading>Двухфакторная аутентификация</Heading>
 				<Text>
-					Ваш код двухвакторной аутентификации: <strong>{token}</strong>
+					Ваш код двухвакторной аутентификации: <strong>{code}</strong>
 				</Text>
 				<Text>
 					Введите этот код в приложении для завершения

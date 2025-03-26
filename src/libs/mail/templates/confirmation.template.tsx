@@ -3,17 +3,13 @@ import { Html } from "@react-email/html"
 import * as React from "react"
 
 interface ConfirmationTemplateProps {
-	domain: string
-	token: string
+	confirmLink: string
 }
 
 export function ConfirmationTemplate({
-	domain,
-	token
+	confirmLink
 }: ConfirmationTemplateProps) {
-	const confirmLink = `${domain}/auth/new-verification?token=${token}`
-
-  return ( 
+	 return ( 
     <Tailwind>
       <Html>
 			<Body className="text-black">

@@ -3,16 +3,12 @@ import { Html } from "@react-email/html"
 import * as React from "react"
 
 interface ResetPasswordTemplateProps {
-	domain: string
-	token: string
+	resetLink: string
 }
 
 export function ResetPasswordTemplate({
-	domain,
-	token
+	resetLink
 }: ResetPasswordTemplateProps) {
-	const resetLink = `${domain}/auth/new-verification?token=${token}`
-
   return (
     <Tailwind>
       <Html>
