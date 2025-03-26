@@ -1,12 +1,16 @@
 import { Body, Heading, Link, Tailwind, Text } from "@react-email/components"
 import { Html } from "@react-email/html"
 import * as React from "react"
-import { TemplateProps } from "../types/template-props.type"
+
+interface ConfirmationTemplateProps {
+	domain: string
+	token: string
+}
 
 export function ConfirmationTemplate({
 	domain,
 	token
-}: TemplateProps) {
+}: ConfirmationTemplateProps) {
 	const confirmLink = `${domain}/auth/new-verification?token=${token}`
 
   return ( 
