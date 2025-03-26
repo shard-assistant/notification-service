@@ -1,41 +1,36 @@
 import { Injectable, OnModuleInit } from "@nestjs/common"
-import { partition } from "rxjs"
 
 import { ConsumerService } from "./kafka/consumer.service"
-import { ProducerService } from "./kafka/producer.service"
+import { MailService } from "./libs/mail/mail.service"
+import { BrokerMessageData } from "./libs/mail/types/message.type"
 
 @Injectable()
 export class AppService implements OnModuleInit {
 	constructor(
-		private readonly producerService: ProducerService,
-		private readonly consumerService: ConsumerService
+		private readonly consumerService: ConsumerService,
+		private readonly mailService: MailService
 	) {}
 
 	async onModuleInit() {
 		await this.consumerService.consume(
-			{ topics: ["notification-service"] },
+			{ topics: ["notification"] },
 			{
-				eachMessage: async ({ topic, partition, message }) => {
-					console.log({
-						value: message.value.toString(),
-						topic: topic.toString(),
-						partition: partition.toString()
-					})
+				eachMessage: async ({ message }) => {
+					const messageData = JSON.parse(
+						message.value.toString()
+					) as BrokerMessageData
+
+					switch (messageData.type) {
+						case "mail": {
+							this.mailService.sendTemplate(
+								messageData.sendTo,
+								messageData.template,
+								messageData.data
+							)
+						}
+					}
 				}
 			}
 		)
-	}
-
-	async sendTopic() {
-		await this.producerService.produce({
-			topic: "notification-service",
-			messages: [
-				{
-					value: "Test message"
-				}
-			]
-		})
-
-		return "Sended"
 	}
 }
