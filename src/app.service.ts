@@ -1,8 +1,10 @@
-import { Injectable, OnModuleInit } from "@nestjs/common"
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common"
 
 import { ConsumerService } from "./kafka/consumer.service"
 import { MailService } from "./libs/mail/mail.service"
 import { BrokerMessageData } from "./libs/mail/types/message.type"
+
+const LOGGER = new Logger("ConsumerService")
 
 @Injectable()
 export class AppService implements OnModuleInit {
@@ -16,18 +18,22 @@ export class AppService implements OnModuleInit {
 			{ topics: ["notification"] },
 			{
 				eachMessage: async ({ message }) => {
-					const messageData = JSON.parse(
-						message.value.toString()
-					) as BrokerMessageData
+					try {
+						const messageData = JSON.parse(
+							message.value.toString()
+						) as BrokerMessageData
 
-					switch (messageData.type) {
-						case "mail": {
-							this.mailService.sendTemplate(
-								messageData.sendTo,
-								messageData.template,
-								messageData.data
-							)
+						switch (messageData.type) {
+							case "mail": {
+								this.mailService.sendTemplate(
+									messageData.sendTo,
+									messageData.template,
+									messageData.data
+								)
+							}
 						}
+					} catch (error) {
+						LOGGER.error("Invalid message!", error)
 					}
 				}
 			}
