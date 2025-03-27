@@ -19,7 +19,7 @@ export class ConsumerService implements OnApplicationShutdown {
 
 	async consume(topic: ConsumerSubscribeTopics, config: ConsumerRunConfig) {
 		const consumer = this.kafka.consumer({
-			groupId: process.env.KAFKA_GROUP_ID || "notification-service"
+			groupId: this.configService.getOrThrow("KAFKA_GROUP_ID")
 		})
 		await consumer.connect()
 		await consumer.subscribe(topic)
